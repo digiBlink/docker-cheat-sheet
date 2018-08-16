@@ -55,23 +55,12 @@ If you're not willing to run a random shell script, please see the [installation
 
 If you are a complete Docker newbie, you should follow the [series of tutorials](https://docs.docker.com/engine/getstarted/) now.
 
-### Mac OS X
+### macOS
+Download and install [Docker Community Edition](https://www.docker.com/community-edition). if you have Homebrew-Cask, just type `brew cask install docker`. Or Download and install [Docker Toolbox](https://docs.docker.com/toolbox/overview/).  [Docker For Mac](https://docs.docker.com/docker-for-mac/) is nice, but it's not quite as finished as the VirtualBox install.  [See the comparison](https://docs.docker.com/docker-for-mac/docker-toolbox/).
 
-Download and install [Docker Toolbox](https://docs.docker.com/toolbox/overview/).  [Docker For Mac](https://docs.docker.com/docker-for-mac/) is nice, but it's not quite as finished as the VirtualBox install.  [See the comparison](https://docs.docker.com/docker-for-mac/docker-toolbox/).
+> **NOTE** Docker Toolbox is legacy. you should to use Docker Community Edition, See (Docker Toolbox)[https://docs.docker.com/toolbox/overview/]
 
-> **NOTE** If you have an existing docker toolbox, you might think you can upgrade [Docker Machine](https://docs.docker.com/machine/install-machine/) binaries directly (either from URL or `docker-machine upgrade default`) and it will take care of itself.  This is not going to help -- `docker-machine` will be `1.10.3` while `docker` is still `1.8.3` or whatever your previous version is.
->
-> You are much better off using Docker Toolbox DMG file to upgrade, which will take care of all the binaries at once.
-
-Once you've installed Docker Toolbox, install a VM with Docker Machine using the VirtualBox provider:
-
-```
-docker-machine create --driver=virtualbox default
-docker-machine ls
-eval "$(docker-machine env default)"
-```
-
-Then start up a container:
+Once you've installed Docker Community Edition, click the docker icon in Launchpad. Then start up a container:
 
 ```
 docker run hello-world
@@ -219,9 +208,25 @@ Images are just [templates for docker containers](https://docs.docker.com/engine
 * [`docker history`](https://docs.docker.com/engine/reference/commandline/history) shows history of image.
 * [`docker tag`](https://docs.docker.com/engine/reference/commandline/tag) tags an image to a name (local or registry).
 
+## Checking Docker Version 
+
+It is very important that you always know the current version of Docker you are currently running on at any point in time.This is very helpful because you get to know what features are compatible with what you have running. This is also important because you know what containers to run from the docker store when you are trying to get template containers. That said let see how to know what version of docker we have running currently
+
+* ['docker version'](https://docs.docker.com/engine/reference/commandline/version/)   check what version of docker you have running 
+* [docker version [OPTIONS]]
+
+Get the server version
+$ docker version --format '{{.Server.Version}}'
+
+1.8.0
+Dump raw JSON data
+$ docker version --format '{{json .}}'
+
+{"Client":{"Version":"1.8.0","ApiVersion":"1.20","GitCommit":"f5bae0a","GoVersion":"go1.4.2","Os":"linux","Arch":"am"}
+
 ### Cleaning up
 
-While you can use the `docker rmi` command to remove specific images, there's a tool called [docker-gc](https://github.com/spotify/docker-gc) that will clean up images that are no longer used by any containers in a safe manner.
+While you can use the `docker rmi` command to remove specific images, there's a tool called [docker-gc](https://github.com/spotify/docker-gc) that will safely clean up images that are no longer used by any containers.
 
 ### Load/Save image
 
@@ -349,6 +354,7 @@ Here are some common text editors and their syntax highlighting modules you coul
 * [Michael Crosby](http://crosbymichael.com/) has some more [Dockerfiles best practices](http://crosbymichael.com/dockerfile-best-practices.html) / [take 2](http://crosbymichael.com/dockerfile-best-practices-take-2.html).
 * [Building Good Docker Images](http://jonathan.bergknoff.com/journal/building-good-docker-images) / [Building Better Docker Images](http://jonathan.bergknoff.com/journal/building-better-docker-images)
 * [Managing Container Configuration with Metadata](https://speakerdeck.com/garethr/managing-container-configuration-with-metadata)
+* [How to write excellent Dockerfiles](https://rock-it.pl/how-to-write-excellent-dockerfiles/)
 
 ## Layers
 
@@ -470,7 +476,6 @@ This is where general Docker best practices and war stories go:
 * [The Rabbit Hole of Using Docker in Automated Tests](http://gregoryszorc.com/blog/2014/10/16/the-rabbit-hole-of-using-docker-in-automated-tests/)
 * [Bridget Kromhout](https://twitter.com/bridgetkromhout) has a useful blog post on [running Docker in production](http://sysadvent.blogspot.co.uk/2014/12/day-1-docker-in-production-reality-not.html) at Dramafever.
 * There's also a best practices [blog post](http://developers.lyst.com/devops/2014/12/08/docker/) from Lyst.
-* [A Docker Dev Environment in 24 Hours!](https://engineering.salesforceiq.com/2013/11/05/a-docker-dev-environment-in-24-hours-part-2-of-2.html)
 * [Building a Development Environment With Docker](https://tersesystems.com/2013/11/20/building-a-development-environment-with-docker/)
 * [Discourse in a Docker Container](https://samsaffron.com/archive/2013/11/07/discourse-in-a-docker-container)
 
@@ -482,7 +487,7 @@ First things first: Docker runs as root. If you are in the `docker` group, you e
 
 Docker should not be your only defense. You should secure and harden it.
 
-For an understanding of what containers leave exposed, you should read is [Understanding and Hardening Linux Containers](https://www.nccgroup.trust/globalassets/our-research/us/whitepapers/2016/april/ncc_group_understanding_hardening_linux_containers-1-1.pdf) by [Aaron Grattafiori](https://twitter.com/dyn___). This is a complete and comprehensive guide to the issues involved with containers, with a plethora of links and footnotes leading on to yet more useful content. The security tips following are useful if you've already hardened containers in the past, but are not a substitute for understanding.
+For an understanding of what containers leave exposed, you should read [Understanding and Hardening Linux Containers](https://www.nccgroup.trust/globalassets/our-research/us/whitepapers/2016/april/ncc_group_understanding_hardening_linux_containers-1-1.pdf) by [Aaron Grattafiori](https://twitter.com/dyn___). This is a complete and comprehensive guide to the issues involved with containers, with a plethora of links and footnotes leading on to yet more useful content. The security tips following are useful if you've already hardened containers in the past, but are not a substitute for understanding.
 
 ### Security Tips
 
@@ -606,7 +611,7 @@ docker commit -run='{"Cmd":["postgres", "-too -many -opts"]}' $(dl) postgres
 ### Get IP address
 
 ```
-docker inspect $(dl) | grep IPAddress | cut -d '"' -f 4
+docker inspect $(dl) | grep -wm1 IPAddress | cut -d '"' -f 4
 ```
 
 or install [jq](https://stedolan.github.io/jq/):
@@ -656,6 +661,12 @@ docker run --rm ubuntu env
 docker kill $(docker ps -q)
 ```
 
+### Delete all containers (force!! running or stopped containers)
+
+```
+docker rm -f $(docker ps -qa)
+```
+
 ### Delete old containers
 
 ```
@@ -666,6 +677,12 @@ docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs docker rm
 
 ```
 docker rm -v $(docker ps -a -q -f status=exited)
+```
+
+### Delete containers after stopping
+
+```
+docker stop $(docker ps -aq) && docker rm -v $(docker ps -aq)
 ```
 
 ### Delete dangling images
@@ -750,7 +767,7 @@ docker ps -a -f ancestor=ubuntu
 
 Remove all untagged images
 ```
-docker rmi $(docker images | grep “^” | awk “{print $3}”)
+docker rmi $(docker images | grep “^” | awk '{split($0,a," "); print a[3]}')
 ```
 
 Remove container by a regular expression
